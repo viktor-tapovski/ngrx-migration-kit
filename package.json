@@ -1,0 +1,53 @@
+{
+  "name": "@rc-df/ngrx-migration-kit",
+  "version": "0.1.0",
+  "description": "AST-based CLI for migrating legacy NgRx actions, effects, reducers, and selectors to functional APIs",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/viktortapovski/ngrx-migration-kit.git"
+  },
+  "bugs": {
+    "url": "https://github.com/viktortapovski/ngrx-migration-kit/issues"
+  },
+  "publishConfig": {
+    "registry": "https://pkgs.dev.azure.com/MarsDevTeam/RoyalCaninDevelopFactory/_packaging/rc-df-unified/npm/registry/"
+  },
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "require": "./dist/index.js"
+    }
+  },
+  "bin": {
+    "ngrx-migration-kit": "./dist/cli.js"
+  },
+  "files": [
+    "dist",
+    "LICENSE",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "tsc --project tsconfig.build.json && node -e \"require('node:fs').chmodSync('dist/cli.js', 493)\"",
+    "test": "jest",
+    "prepublishOnly": "npm run build"
+  },
+  "jest": {
+    "preset": "ts-jest",
+    "testEnvironment": "node"
+  },
+  "engines": {
+    "node": ">=18.18.0"
+  },
+  "dependencies": {
+    "jest": "^30.5.1",
+    "typescript": "^5.8.3"
+  },
+  "devDependencies": {
+    "@types/jest": "^30.0.0",
+    "@types/node": "^22.8.0",
+    "ts-jest": "^29.4.12"
+  }
+}
