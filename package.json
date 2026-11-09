@@ -1,6 +1,6 @@
 {
   "name": "@rc-df/ngrx-migration-kit",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "AST-based CLI for migrating legacy NgRx actions, effects, reducers, and selectors to functional APIs",
   "license": "MIT",
   "repository": {
