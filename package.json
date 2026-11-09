@@ -39,15 +39,15 @@
     "testEnvironment": "node"
   },
   "engines": {
-    "node": ">=18.18.0"
+    "node": "^20.19.0 || ^22.12.0 || >=24.0.0"
   },
   "dependencies": {
-    "jest": "^30.5.1",
-    "typescript": "^5.8.3"
+    "typescript": ">=5.9.3 <6.1"
   },
   "devDependencies": {
     "@types/jest": "^30.0.0",
-    "@types/node": "^22.8.0",
-    "ts-jest": "^29.4.12"
+    "@types/node": "^26.6.6",
+    "jest": "^30.5.2",
+    "ts-jest": "^29.4.15"
   }
 }
