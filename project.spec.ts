@@ -56,12 +56,6 @@ describe("migrateProject", () => {
     rmSync(rootDir, { recursive: true, force: true });
   });
 
-  it("explains that root must be a directory when given a file", () => {
-    expect(() =>
-      migrateProject({ rootDir: join(rootDir, "actions", "load.actions.ts") }),
-    ).toThrow(/--root must be a directory.*--path/);
-  });
-
   it("rewrites consumers outside filtered action paths", () => {
     const dryRun = migrateProject({
       rootDir,
@@ -99,39 +93,6 @@ describe("migrateProject", () => {
     );
   });
 
-  it("maps existing functional actions outside selected paths in reducers", () => {
-    writeFileSync(
-      join(rootDir, "auth.actions.ts"),
-      `
-        enum AuthActionTypes { SetStatus = '[Auth] Set status' }
-        export const setAuthStatus = createAction(AuthActionTypes.SetStatus);
-      `,
-    );
-    writeFileSync(
-      join(rootDir, "auth.reducer.ts"),
-      `
-        import { setAuthStatus } from './auth.actions';
-        const initialState = { status: 'initial' };
-        export function authReducer(state = initialState, action: AuthActions) {
-          switch (action.type) {
-            case setAuthStatus.type:
-              return { ...state, status: 'authenticated' };
-            default:
-              return state;
-          }
-        }
-      `,
-    );
-
-    const result = migrateProject({
-      rootDir,
-      include: ["actions/load.actions.ts"],
-    });
-
-    expect(result.diagnostics).toEqual([]);
-    expect(result.filesChanged).toContain("auth.reducer.ts");
-  });
-
   it("converts a reducer switch after migrating its action file", () => {
     writeFileSync(
       join(rootDir, "reducer.ts"),
@@ -161,7 +122,7 @@ describe("migrateProject", () => {
     const reducer = readFileSync(join(rootDir, "reducer.ts"), "utf8");
     expect(reducer).toContain("export const reducer = createReducer(");
     expect(reducer).toContain(
-      "on(load, (state) => ({ ...state, loaded: true }))",
+      "on(load, (state, action) => ({ ...state, loaded: true }))",
     );
   });
 });

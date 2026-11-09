@@ -1,5 +1,5 @@
-import { readFileSync, readdirSync, statSync, writeFileSync } from "node:fs";
-import { join, relative } from "node:path";
+import { readFileSync, readdirSync, writeFileSync } from 'node:fs';
+import { join, relative } from 'node:path';
 import {
   ActionMetadata,
   discoverFunctionalActions,
@@ -8,7 +8,7 @@ import {
   rewriteReducerSource,
   rewriteConsumerSource,
   scanSource,
-} from "./migrator";
+} from './migrator';
 
 export interface ProjectMigrationOptions {
   rootDir: string;
@@ -39,7 +39,7 @@ export function migrateProject(
     matchesInclude(filePath, options.rootDir, options.include),
   );
   const sourceByFile = new Map(
-    allFiles.map((filePath) => [filePath, readFileSync(filePath, "utf8")]),
+    allFiles.map((filePath) => [filePath, readFileSync(filePath, 'utf8')]),
   );
   const migratedSources = new Map<string, string>();
   const actions: ActionMetadata[] = [];
@@ -65,22 +65,6 @@ export function migrateProject(
     migratedSources.set(filePath, result.source);
     actions.push(...allActions);
     diagnostics.push(...result.diagnostics);
-  }
-
-  const knownActionTypes = new Set(
-    actions.map(({ typeExpression }) => typeExpression),
-  );
-  for (const filePath of allFiles) {
-    const source = sourceByFile.get(filePath);
-    if (source === undefined) {
-      continue;
-    }
-    for (const action of discoverFunctionalActions(source, filePath)) {
-      if (!knownActionTypes.has(action.typeExpression)) {
-        actions.push(action);
-        knownActionTypes.add(action.typeExpression);
-      }
-    }
   }
 
   const actionClassNames = new Set(actions.map((action) => action.className));
@@ -130,12 +114,12 @@ export function migrateProject(
 
   const blockingDiagnostics = diagnostics.filter(
     ({ code }) =>
-      code === "unsupported-action" ||
-      code === "missing-action-type" ||
-      code === "missing-action-import" ||
-      code === "unsupported-reducer" ||
-      code === "unmapped-reducer-action" ||
-      code === "missing-reducer-action-import",
+      code === 'unsupported-action' ||
+      code === 'missing-action-type' ||
+      code === 'missing-action-import' ||
+      code === 'unsupported-reducer' ||
+      code === 'unmapped-reducer-action' ||
+      code === 'missing-reducer-action-import',
   );
   const canApply =
     options.apply &&
@@ -161,23 +145,17 @@ export function migrateProject(
 }
 
 function collectTypeScriptFiles(rootDir: string): string[] {
-  if (!statSync(rootDir).isDirectory()) {
-    throw new Error(
-      `--root must be a directory: ${rootDir}. To target a file, use --path <file>.`,
-    );
-  }
-
   const files: string[] = [];
   const entries = readdirSync(rootDir, { withFileTypes: true });
 
   for (const entry of entries) {
-    if (["node_modules", "dist", ".angular"].includes(entry.name)) {
+    if (['node_modules', 'dist', '.angular'].includes(entry.name)) {
       continue;
     }
     const filePath = join(rootDir, entry.name);
     if (entry.isDirectory()) {
       files.push(...collectTypeScriptFiles(filePath));
-    } else if (entry.isFile() && filePath.endsWith(".ts")) {
+    } else if (entry.isFile() && filePath.endsWith('.ts')) {
       files.push(filePath);
     }
   }
