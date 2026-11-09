@@ -51,8 +51,8 @@ ngrx-migration-kit \
 
 Useful flags:
 
-- `--root <dir>`: source tree to scan. Default: `src/app`.
-- `--path <text>`: include matching relative paths. Repeat for staged migration.
+- `--root <dir>`: directory tree to scan. Defaults to the current working directory.
+- `--path <text>`: include matching relative paths or a specific file. Repeat for staged migration.
 - `--apply`: write generated action creators and consumer rewrites.
 - `--strict`: return non-zero when unsupported/default-risk diagnostics or stale class references remain.
 - `--json`: emit machine-readable migration report.
@@ -80,3 +80,12 @@ Agent behavior:
 - Writes nothing unless `--apply` is supplied. `--strict --apply` is atomic when blocking findings exist.
 
 Start with one action/effect slice, run affected tests, then widen `--path`.
+
+## Releases
+
+Releases are managed by Release Please on pushes to `main`. Use conventional
+commits (`feat`, `fix`, and `BREAKING CHANGE`) so Release Please can determine
+the next version and generate the corresponding `CHANGELOG.md` entries. The
+release pull request includes the updated changelog; merging it creates a
+GitHub Release. Publishing to the configured npm registry is not part of this
+workflow.
